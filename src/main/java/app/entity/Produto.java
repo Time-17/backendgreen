@@ -36,19 +36,10 @@ public class Produto {
 	private String descricaoProduto;
 	
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "idFornecedor")
-	private Fornecedor fornecedor;
 	
-	//DEAN: mapeamento item carrinho adicionado
+	
+	//mapeamento item carrinho adicionado
 	@OneToMany (mappedBy = "produto")
 	private List<ItemCarrinho> itemCarrinho;
 	
-	@ManyToMany
-	@JoinTable(
-			name = "categoriaProduto",
-			joinColumns = @JoinColumn(name = "idProduto"),
-			inverseJoinColumns = @JoinColumn(name = "idCategoria")
-	)
-	List<Categoria> categoria;
 }

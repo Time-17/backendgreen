@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.entity.Carrinho;
 import app.service.CarrinhoService;
-import dto.MesValorDTO;
 
 @RequestMapping("/api/carrinho")
 @RestController
@@ -123,72 +122,7 @@ public class CarrinhoController {
 		
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/buscarVendaAcimaValor")
-	public ResponseEntity<List<Carrinho>> buscarVendaAcimaValor (@RequestParam double valorCarrinho){
-		
-		try {
-			
-			List<Carrinho> lista = this.carrinhoService.buscarVendaAcimaValor(valorCarrinho);
-			return new ResponseEntity<>(lista, HttpStatus.OK);
-			
-		} catch (Exception e) {
-			
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			
-		}
-		
-	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/buscarVendaAbaixoValor")
-	public ResponseEntity<List<Carrinho>> buscarVendaAbaixoValor (@RequestParam double valorCarrinho){
-		
-		try {
-			
-			List<Carrinho> lista = this.carrinhoService.buscarVendaAbaixoValor(valorCarrinho);
-			return new ResponseEntity<>(lista, HttpStatus.OK);
-			
-		} catch (Exception e) {
-			
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			
-		}
-		
-	}
-	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/ListVendasByMonthForLast12Months")
-	public ResponseEntity<List<MesValorDTO>> ListVendasByMonthForLast12Months (){
-		
-		try {
-			
-			List<MesValorDTO> lista = this.carrinhoService.getTotalValorCarrinhoByMonthForLast12Months();
-			return new ResponseEntity<>(lista, HttpStatus.OK);
-			
-		} catch (Exception e) {
-			
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			
-		}
-		
-	}
-	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/getVendasFinalizadas")
-	public ResponseEntity<List<Carrinho>> getVendasFinalizadas (){
-		
-		try {
-			
-			List<Carrinho> lista = this.carrinhoService.getVendasFinalizadas();
-			return new ResponseEntity<>(lista, HttpStatus.OK);
-			
-		} catch (Exception e) {
-			
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			
-		}
-		
-	}
+
 	
 }

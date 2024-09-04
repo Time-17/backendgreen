@@ -10,8 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import app.config.JwtServiceGenerator;
-import app.repository.LogRepository;
-import app.service.LogService;
+
 
 @Service
 public class UsuarioService {
@@ -27,9 +26,7 @@ public class UsuarioService {
     @Autowired
     private BCryptPasswordEncoder bCrypt;
     
-    @Autowired
-    LogService logService;
-    
+        
 
     
     
@@ -60,7 +57,6 @@ public class UsuarioService {
 		
 		this.usuarioRepository.save(usuario);
 
-        logService.gerarLogCadUsuario("SAVE", "Usuario", usuario.getIdUsuario(), null, null, usuario.getEmailUsuario(), usuario.getRole());
         
 		return usuario.getEmailUsuario() + " Foi registrado";
 	}
@@ -83,7 +79,6 @@ public class UsuarioService {
 		
 		this.usuarioRepository.save(usuario);
 		
-        logService.gerarLog("UPDATE", "Usuario", idUsuario, null, null);
         
 		return "O " + usuario.getEmailUsuario() + " Foi atualizado";
 		
@@ -94,7 +89,6 @@ public class UsuarioService {
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 		
 		if(usuarioOptional.isPresent()) {
-			logService.gerarLog("DELETE", "Usuario", idUsuario, null, null);
 		
 			this.usuarioRepository.deleteById(idUsuario);
 			return "Usuario deletado";

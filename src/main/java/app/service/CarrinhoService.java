@@ -14,7 +14,6 @@ import app.repository.CarrinhoRepository;
 import app.repository.ItemCarrinhoRepository;
 import app.repository.ProdutoRepository;
 import jakarta.validation.Valid;
-import dto.MesValorDTO;
 
 import java.time.LocalDate;
 
@@ -29,8 +28,7 @@ public class CarrinhoService {
 	private ItemCarrinhoService itemCarrinhoService;
 	@Autowired
 	private ProdutoRepository produtoRepository;
-	@Autowired
-	private LogService logService;
+	
 	
 	
 //	private Date dataCarrinho;
@@ -55,17 +53,7 @@ public class CarrinhoService {
 	    if (carrinho.getItemCarrinho() == null || carrinho.getItemCarrinho().isEmpty()) {
 	    	throw new RuntimeException(" Carrinho vazio");
 	    }
-	    // Testar necessidade apos implementação 
-		// Percorre os itens do carrinho e os salva no banco de dados
-//        for (ItemCarrinho item : carrinho.getItemCarrinho()) {
-//            item.setCarrinho(carrinho);
-//          //adiciona o valor do produto a variavel valorUnitario para manter o registro do valor na compra
-//    		double valorUnitario = this.itemCarrinhoService.setValor(item.getProduto());
-//    		item.setValorUnitario(valorUnitario);
-//            // Salva o item do carrinho no banco de dados
-//            itemCarrinhoRepository.save(item);
-//        }
-        //chamada do metodo para fazer o calculo do valor final do carrinho antes de persistir o mesmo
+	    
         double valorFinal = this.valorTotalCarrinho(carrinho.getItemCarrinho());
         carrinho.setValorCarrinho(valorFinal);
         carrinho.setStatus("Encerrado");
@@ -73,10 +61,6 @@ public class CarrinhoService {
         //salva o carrinho no banco de dados 
         this.carrinhoRepository.save(carrinho);
         
-        Double detalheCarrinho = carrinho.getValorCarrinho();
-        String formato = "compra: %.2f, foi criada";
-        String detalhes = String.format(formato, detalheCarrinho);
-        logService.gerarLog("SAVE", "Carrinho", carrinho.getIdCarrinho(), detalhes, null);
       
         return carrinho.getValorCarrinho() + "  registrada";
 	}
@@ -128,11 +112,6 @@ public class CarrinhoService {
 		Double valorAntigo = carrinhoAntigo.getValorCarrinho();
 		this.carrinhoRepository.save(carrinho);
 		
-		Double detalheCarrinho = carrinho.getValorCarrinho();
-        String formato = "compra alterada valor antigo: %s valor novo: %s";
-        String detalhes = String.format(formato, valorAntigo, detalheCarrinho);
-        logService.gerarLog("UPDATE", "Carrinho", carrinho.getIdCarrinho(), detalhes, null);
-		
 		return " Carrinho " + carrinho.getValorCarrinho() + " Foi atualizado";
 		
 	}
@@ -154,7 +133,6 @@ public class CarrinhoService {
 		Double detalheCarrinho = carrinho.getValorCarrinho();
         String formato = "compra: %.2f, foi criada";
         String detalhes = String.format(formato, detalheCarrinho);
-        logService.gerarLog("DELETE", "Carrinho", carrinho.getIdCarrinho(), detalhes, null);
         
         this.carrinhoRepository.deleteById(idCarrinho);
 		return " Venda deletada";
@@ -171,33 +149,5 @@ public class CarrinhoService {
 		
 	}
 	
-	public List<Carrinho> buscarVendaAcimaValor(double valorCarrinho){
-		return this.carrinhoRepository.buscarVendaAcimaValor(valorCarrinho);
-	}
-	
-	public List<Carrinho> buscarVendaAbaixoValor(double valorCarrinho){
-		return this.carrinhoRepository.buscarVendaAbaixoValor(valorCarrinho);
-	}
-	
-//	public List<MesValorDTO> ListVendasByMonthForLast12Months(){
-//		return this.carrinhoRepository.findTotalValorCarrinhoByMonthForLast12Months();
-//	}
-	
-	public List<MesValorDTO> getTotalValorCarrinhoByMonthForLast12Months() {
-        List<Object[]> results = carrinhoRepository.findTotalValorCarrinhoByMonthForLast12Months();
-        List<MesValorDTO> dtoResults = new ArrayList<>();
-
-        for (Object[] result : results) {
-            String mes = (String) result[0];
-            Double valorTotal = ((Number) result[1]).doubleValue(); // Cast para Double
-            dtoResults.add(new MesValorDTO(mes, valorTotal));
-        }
-
-        return dtoResults;
-    }
-	
-	public List<Carrinho> getVendasFinalizadas(){
-		return this.carrinhoRepository.getVendasFinalizadas();
-	}
 
 }

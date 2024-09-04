@@ -16,17 +16,11 @@ public class ClienteService {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
-	@Autowired
-	private LogService logService;
+	
 	
 	public String save (Cliente cliente) {
 		this.clienteRepository.save(cliente);
-		
-		String detalheCliente = cliente.getNomeCliente();
-        String formato = "a cliente: %s, foi criado";
-        String detalhes = String.format(formato, detalheCliente);
-        logService.gerarLog("SAVE", "Cliente", cliente.getIdCliente(), detalhes, detalheCliente);
-		
+				
 		return cliente.getNomeCliente() + " Foi registrado";
 	}
 	
@@ -67,7 +61,6 @@ public class ClienteService {
 		String detalheEndereco = cliente.getEnderecoCliente();
         String formato = "Atualizado: nome antigo: %s novo: %s | telefone antigo: %S novo: %s | endereco antigo: %s novo: %s";
         String detalhes = String.format(formato, nomeAntigo, detalheNome, telefoneAntigo, detalheTelefone, enderecoAntigo, detalheEndereco);
-        logService.gerarLog("UPDATE", "Cliente", cliente.getIdCliente(), detalhes, detalheNome);
         
         this.clienteRepository.save(cliente);
 		return "O " + cliente.getNomeCliente() + " Foi atualizado";
@@ -78,9 +71,6 @@ public class ClienteService {
 		
 		Cliente cliente = clienteRepository.findById(idCliente).get();
 		String detalheCliente = cliente.getNomeCliente();
-        String formato = "a cliente: %s, foi deletado";
-        String detalhes = String.format(formato, detalheCliente);
-        logService.gerarLog("DELETE", "Cliente", cliente.getIdCliente(), detalhes, detalheCliente);
         
         this.clienteRepository.deleteById(idCliente);
 		

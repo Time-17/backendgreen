@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import app.auth.Usuario;
 import app.entity.Carrinho;
-import dto.MesValorDTO;
 
 public interface CarrinhoRepository extends JpaRepository<Carrinho, Long> {
 	
